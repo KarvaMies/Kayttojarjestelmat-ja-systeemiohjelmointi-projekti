@@ -168,7 +168,6 @@ int main(int argc, char *argv[]){
     }
 
     if (argc == 3){
-        printf("argc == 3\n");
         output = argv[2];
     }
 
