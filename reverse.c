@@ -35,7 +35,18 @@ LINE *addLine(LINE *pFirst, char text[SIZE]){
 }
 
 LINE *getLinesUser(LINE *pFirst){
+    char *buffer = NULL;
+    size_t buffer_size = 0;
+    ssize_t line_size;
 
+    line_size = getline(&buffer, &buffer_size, stdin);
+    while (buffer[0] != '\n'){
+        pFirst = addLine(pFirst, buffer);
+        line_size = getline(&buffer, &buffer_size, stdin);
+    }
+    free(buffer);
+    buffer = NULL;
+    return pFirst;
 }
 
 LINE *getLinesFile(LINE *pFirst, char *userInputFileName, int userInputSize){
@@ -44,14 +55,14 @@ LINE *getLinesFile(LINE *pFirst, char *userInputFileName, int userInputSize){
     size_t buffer_size = 0;
     ssize_t line_size;
 
-    if ((userInputSize != 1) && ((input = fopen(userInputFileName, "r")) == NULL)){
+    if ((input = fopen(userInputFileName, "r")) == NULL){
         fprintf(stderr, "error: cannot open file '%s'\n", userInputFileName);
         exit(1);
     }
 
-    //getlinen käyttö: https://riptutorial.com/c/example/8274/get-lines-from-a-file-using-getline--
+    // getlinen käyttö: https://riptutorial.com/c/example/8274/get-lines-from-a-file-using-getline--
     line_size = getline(&buffer, &buffer_size, input);
-    while (line_size >= 0){
+    while (line_size >= 0) {
         pFirst = addLine(pFirst, buffer);
         line_size = getline(&buffer, &buffer_size, input);
     }
@@ -61,6 +72,7 @@ LINE *getLinesFile(LINE *pFirst, char *userInputFileName, int userInputSize){
     return pFirst;
 }
 
+// Vain testaamiseen
 LINE *printLines(LINE *pFirst, char *outputFile){
     FILE *output;    
     LINE *ptr = pFirst;
@@ -165,6 +177,7 @@ int main(int argc, char *argv[]){
     } else {
         pStart = getLinesFile(pStart, argv[1], argc);
     }
+
     pStart = printLinesReverse(pStart, output);
     pStart = freeMemory(pStart);
    printf("\n\nToimii hyvin :)\n");
