@@ -134,7 +134,7 @@ LINE *printLinesReverse(LINE *pFirst, char *outputFile){
         ptr = ptr->previousLine;
     }
     /*
-    Konsoliin tulee ajettaessa "Segmentation fault" fclosen kohdalla. kts rivien 97-100 kommentti.
+    Konsoliin tulee ajettaessa "Segmentation fault" fclosen kohdalla. kts aliohjelman alussa oleva kommentti.
     Toimii ilman virheitä, jos fclosen kommentoi pois. Miksi ei toimi, jos ei anna output-filulle nimeä ja 
     input-filulle annetaan, tai jos kommentoi fclosen pois?
     */
