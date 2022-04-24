@@ -180,6 +180,5 @@ int main(int argc, char *argv[]){
 
     pStart = printLinesReverse(pStart, output);
     pStart = freeMemory(pStart);
-   printf("\n\nToimii hyvin :)\n");
     return 0;
 }
