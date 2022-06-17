@@ -87,8 +87,8 @@ int main()
                 continue;
             }
             for (int i = 1; i < LEN - 1; i++)
-            { // path[0] on aina null
-                if (path[i] == NULL)
+            {
+                if (path[i] == NULL)    // path[0] on aina null
                 {
                     break;
                 }
