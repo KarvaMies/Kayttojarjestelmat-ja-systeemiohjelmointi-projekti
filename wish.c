@@ -4,9 +4,9 @@
 #include <string.h>
 #include <sys/wait.h>
 
-#define ARGLEN 5
+#define ARGLEN 50
 #define CMDLEN 100
-#define PATHLEN 4
+#define PATHLEN 49
 
 int main()
 {
