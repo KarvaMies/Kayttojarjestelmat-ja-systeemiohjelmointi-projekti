@@ -4,22 +4,23 @@
 #include <string.h>
 #include <sys/wait.h>
 
-#define LEN 5
-#define LEN1 100
+#define ARGLEN 5
+#define CMDLEN 100
+#define PATHLEN 4
 
 int main()
 {
-    char *command = NULL, cmd[LEN1], pathvar[LEN1];
-    char *args[LEN] = {NULL}, *path[LEN] = {NULL};
+    char *command = NULL, cmd[CMDLEN], pathvar[CMDLEN];
+    char *args[ARGLEN] = {NULL}, *path[PATHLEN] = {NULL};
     size_t size = 0;
     int accessed = 0;
 
     while (1)
     {
-        for (int i = 0; i < LEN; i++)
-        {
-            printf("ennen getlinea: path[%d]: %s\n", i, path[i]);
-        }
+        // for (int i = 0; i < ARGLEN; i++)
+        // {
+        //     printf("ennen getlinea: path[%d]: %s\n", i, path[i]);
+        // }
         printf("wish> ");
         getline(&command, &size, stdin);
         /*
@@ -27,24 +28,32 @@ int main()
         https://stackoverflow.com/questions/2693776/removing-trailing-newline-character-from-fgets-input
         */
         command[strcspn(command, "\n")] = 0;
-        for (int i = 0; i < LEN; i++)
-        {
-            printf("getlinen jälkeen: path[%d]: %s\n", i, path[i]);
-        }
-        printf("\n");
+        // for (int i = 0; i < ARGLEN; i++)
+        // {
+        //     printf("getlinen jälkeen: args[%d]: %s\n", i, args[i]);
+        // }
+        // printf("\n");
 
         strcpy(cmd, strtok(command, " "));
+        args[0] = malloc(sizeof(char) * 50);
         args[0] = cmd;
 
-        for (int i = 1; i < LEN; i++)
+        for (int i = 1; i < ARGLEN; i++)
         {
+            args[i] = malloc(sizeof(char) * 50);
             args[i] = strtok(NULL, " ");
         }
+
+        for (int i = 0; i < ARGLEN; i++)
+        {
+            printf("mallocin jälkeen: args[%d]: %s\n", i, args[i]);
+        }
+        printf("\n");
 
         // if (strcmp(cmd, "path") != 0)
         // {
         //     printf("\n\nKaikki muuttujat:\ncommand: %s\t\tcmd: %s\t\tpathvar: %s\n", command, cmd, pathvar);
-        //     for (int i = 0; i < LEN; i++)
+        //     for (int i = 0; i < ARGLEN; i++)
         //     {
         //         printf("args[%d]: %s\t\tpath[%d]: %s\n", i, args[i], i, path[i]);
         //     }
@@ -69,10 +78,30 @@ int main()
         }
         else if (strcmp(cmd, "path") == 0)
         {
-            memcpy(path, args, sizeof(args));
+            for (int i = 0; i < PATHLEN; i++)
+            {
+                printf("ennen memcpy: path[%d]: %s\n", i, path[i]);
+            }
+            printf("\n");
+            // memcpy(path, args, sizeof(args));
+
+            for (int i = 0; i < PATHLEN; i++)
+            {
+                printf("Malloc-loopin alku %d\n", i);
+                if (args[i + 1] != NULL)
+                {
+                    path[i] = malloc(sizeof(char) * 50);
+                    strcpy(path[i], args[i + 1]);
+                }
+            }
+
+            for (int i = 0; i < PATHLEN; i++)
+            {
+                printf("memcpyn jälkeen: path[%d]: %s\n", i, path[i]);
+            }
 
             // printf("\n\nKaikki muuttujat:\ncommand: %s\t\tcmd: %s\t\tpathvar: %s\n", command, cmd, pathvar);
-            // for (int i = 0; i < LEN; i++)
+            // for (int i = 0; i < ARGLEN; i++)
             // {
             //     printf("args[%d]: %s\t\tpath[%d]: %s\n", i, args[i], i, path[i]);
             // }
@@ -86,12 +115,17 @@ int main()
                 fprintf(stderr, "Error: could not find path\n");
                 continue;
             }
-            for (int i = 1; i < LEN - 1; i++)
+            for (int i = 0; i < PATHLEN; i++)
             {
-                if (path[i] == NULL)    // path[0] on aina null
+                if (path[i] == NULL)
                 {
                     break;
                 }
+                for (int i = 0; i < PATHLEN; i++)
+                {
+                    printf("ls: path[%d]: %s\t args[%d]: %s\n", i, path[i], i, args[i]);
+                }
+                printf("\n");
                 strcpy(pathvar, path[i]);
                 strcat(pathvar, command);
                 if (access(pathvar, X_OK) == 0)
